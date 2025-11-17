@@ -2,39 +2,54 @@ package ru.hogwarts.school.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.entity.Faculty;
+import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.*;
 
 @Service
 public class FacultyServiceImpl implements FacultyService {
-    private final Map<Long,Faculty> faculties=new HashMap<>();
-    private Long id=0L;
+    private final FacultyRepository facultyRepository;
+
+    public FacultyServiceImpl(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
+
     @Override
     public Faculty createFaculty(Faculty faculty) {
-        faculty.setId(++id);
-        faculties.put(id,faculty);
-        return faculty;
+        return facultyRepository.save(faculty);
     }
 
     @Override
     public Faculty findFaculty(Long id) {
-        return faculties.get(id);
+        return facultyRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("Faculty with id " + id + " not found")
+        );
     }
 
     @Override
-    public Faculty updateFaculty(Faculty faculty) {
-        return faculties.put(faculty.getId(),faculty);
+    public Faculty updateFaculty(Long id,Faculty faculty) {
+        Faculty existing = facultyRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("Faculty with id " + id + " not found")
+        );
+
+
+
+        existing.setName(faculty.getName());
+        existing.setColor(faculty.getColor());
+
+        return facultyRepository.save(existing);
+
     }
 
     @Override
     public void deleteFaculty(Long id) {
-        faculties.remove(id);
+        facultyRepository.deleteById(id);
     }
 
     @Override
     public Collection<Faculty> filterByColor(String color) {
-        Collection<Faculty> colors=faculties.values();
+        Collection<Faculty> colors=facultyRepository.findAll();
         List<Faculty> result=new ArrayList<>();
         for (Faculty faculty:colors){
             if(faculty.getColor().equals(color)){
