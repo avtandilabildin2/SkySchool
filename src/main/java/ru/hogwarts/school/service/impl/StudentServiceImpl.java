@@ -1,6 +1,7 @@
 package ru.hogwarts.school.service.impl;
 
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.entity.Faculty;
 import ru.hogwarts.school.entity.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
@@ -56,6 +57,21 @@ public class StudentServiceImpl implements StudentService {
             }
         }
         return result;
+    }
+    @Override
+    public Collection<Student> filterByAgeBetween(int min, int max) {
+        return studentRepository.findByAgeBetween(min, max);
+    }
+
+    @Override
+    public Faculty getStudentFaculty(Long id) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Student not found"));
+        return student.getFaculty();
+    }
+    @Override
+    public Collection<Student> findStudentsByFacultyId(Long facultyId) {
+        return studentRepository.findAllByFacultyId(facultyId);
     }
 
 
