@@ -18,7 +18,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student createStudent(Student student) {
-       return studentRepository.save(student);
+        return studentRepository.save(student);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class StudentServiceImpl implements StudentService {
 
         existing.setName(student.getName());
         existing.setAge(student.getAge());
-       return studentRepository.save(existing);
+        return studentRepository.save(existing);
 
     }
 

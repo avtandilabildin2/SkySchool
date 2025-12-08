@@ -1,0 +1,12 @@
+{
+    name:Abi,
+    age:20
+}
+{
+    name:Alex
+    age:35
+}
+{
+    user1,
+    75
+}
