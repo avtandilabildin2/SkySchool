@@ -39,14 +39,9 @@ class FacultyControllerTest {
     @Autowired
     private FacultyRepository facultyRepository;
 
-    private Faculty testFaculty;
 
     @BeforeAll
     void setup(){
-        testFaculty = new Faculty();
-        testFaculty.setName("Test Faculty");
-        testFaculty.setColor("Red");
-        testFaculty = facultyService.createFaculty(testFaculty);
     }
 
     @Test
@@ -89,8 +84,7 @@ class FacultyControllerTest {
         faculty.setName("Ravenclaw");
         faculty.setColor("Blue");
 
-        Faculty created =
-                restTemplate.postForObject("/faculties/create", faculty, Faculty.class);
+        Faculty saved = facultyRepository.save(faculty);
 
         Faculty updated = new Faculty();
         updated.setName("Ravenclaw Updated");
@@ -100,22 +94,33 @@ class FacultyControllerTest {
 
         ResponseEntity<Faculty> response =
                 restTemplate.exchange(
-                        "/faculties/update/" + created.getId(),
+                        "/faculties/update/" + saved.getId(),
                         HttpMethod.PUT,
                         entity,
                         Faculty.class
                 );
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getColor()).isEqualTo("Dark Blue");
     }
+
     @Test
     void deleteFacultyTest() {
-        facultyService.deleteFaculty(testFaculty.getId());
+        Faculty faculty = new Faculty();
+        faculty.setName("Delete Test");
+        faculty.setColor("Black");
 
-        boolean exists = facultyRepository.existsById(testFaculty.getId());
+        Faculty created =
+                restTemplate.postForObject("/faculties/create", faculty, Faculty.class);
+
+        restTemplate.delete("/faculties/delete/" + created.getId());
+
+        boolean exists = facultyRepository.existsById(created.getId());
         Assertions.assertFalse(exists, "Faculty should not exist");
     }
+
+
 
 
 
