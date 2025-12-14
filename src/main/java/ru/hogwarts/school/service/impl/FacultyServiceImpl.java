@@ -21,12 +21,11 @@ public class FacultyServiceImpl implements FacultyService {
         return facultyRepository.save(faculty);
     }
 
-    @Override
     public Faculty findFaculty(Long id) {
-        return facultyRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("Faculty with id " + id + " not found")
-        );
+        return facultyRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Faculty with id " + id + " not found"));
     }
+
 
     @Override
     public Faculty updateFaculty(Long id,Faculty faculty) {
@@ -42,7 +41,6 @@ public class FacultyServiceImpl implements FacultyService {
         return facultyRepository.save(existing);
 
     }
-
     @Override
     public void deleteFaculty(Long id) {
         facultyRepository.deleteById(id);

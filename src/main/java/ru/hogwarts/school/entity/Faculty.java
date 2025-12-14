@@ -11,7 +11,8 @@ public class Faculty {
     Long id;
     String name;
     String color;
-    @OneToMany(mappedBy = "faculty")
+
+    @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Student> students;
     public Faculty(Long id, String name, String color) {
         this.id=id;
