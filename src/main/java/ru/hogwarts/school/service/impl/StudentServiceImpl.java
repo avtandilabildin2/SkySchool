@@ -49,14 +49,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Collection<Student> filterByAge(int age) {
-//        Collection<Student> ages=studentRepository.findAll();
-//        Collection<Student> result=new ArrayList<>();
-//        for(Student student:ages){
-//            if(student.getAge()==age){
-//                result.add(student);
-//            }
-//        }
-//        return result;
+
         return studentRepository.findAllByAge(age);
 
     }
@@ -74,6 +67,21 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Collection<Student> findStudentsByFacultyId(Long facultyId) {
         return studentRepository.findAllByFacultyId(facultyId);
+    }
+
+    @Override
+    public Long getStudentCount() {
+        return studentRepository.getStudentCount();
+    }
+
+    @Override
+    public Double getAverageAge() {
+        return studentRepository.getAverageAge();
+    }
+
+    @Override
+    public List<Student> getLastFiveStudents() {
+        return studentRepository.getLastFiveStudents();
     }
 
 

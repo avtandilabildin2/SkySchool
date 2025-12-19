@@ -1,6 +1,7 @@
 package ru.hogwarts.school.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +57,13 @@ public class AvatarController {
                 .contentType(MediaType.parseMediaType(avatar.getMediaType()))
                 .contentLength(data.length)
                 .body(data);
+    }
+    @GetMapping("/page-avatars")
+    public Page<Avatar> getAvatars(
+            @RequestParam int page,
+            @RequestParam int size
+    ){
+        return avatarService.getAvatars(page,size);
     }
 }
 

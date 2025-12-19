@@ -1,5 +1,8 @@
 package ru.hogwarts.school.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.entity.Avatar;
@@ -59,6 +62,11 @@ public class AvatarServiceImpl implements AvatarService {
     public Avatar getAvatar(long studentId) {
         return avatarRepository.findByStudentId(studentId)
                 .orElseThrow(() -> new RuntimeException("Avatar not found"));
+    }
+
+    @Override
+    public Page<Avatar> getAvatars(int page,int size) {
+        return avatarRepository.findAll(PageRequest.of(page, size));
     }
 
     private String getExtension(String filename) {

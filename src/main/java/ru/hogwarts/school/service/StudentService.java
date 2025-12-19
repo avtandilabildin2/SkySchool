@@ -7,6 +7,7 @@ import ru.hogwarts.school.entity.Faculty;
 import ru.hogwarts.school.entity.Student;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface StudentService {
@@ -19,5 +20,9 @@ public interface StudentService {
   Collection<Student> filterByAgeBetween(int min, int max);
   Faculty getStudentFaculty(Long id);
   Collection<Student> findStudentsByFacultyId(Long facultyId);
+  Long getStudentCount();
+  Double getAverageAge();
+  List<Student> getLastFiveStudents();
+
 
 }
