@@ -96,4 +96,14 @@ public class FacultyServiceImpl implements FacultyService {
         return new ArrayList<>(faculty.getStudents());
 
     }
+
+    @Override
+    public String getLongestFacultyName() {
+        return facultyRepository.findAll()
+                .stream()
+                .map(Faculty::getName)
+                .filter(name -> name != null && !name.isBlank())
+                .max(Comparator.comparingInt(String::length))
+                .orElse("");
+    }
 }
