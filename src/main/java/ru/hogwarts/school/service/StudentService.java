@@ -25,5 +25,6 @@ public interface StudentService {
   List<Student> getLastFiveStudents();
   List<String> getStudentsNamesStartingWithA();
   double getAverageStudentsAge();
+  List<Student> getAllStudents();
 
 }
