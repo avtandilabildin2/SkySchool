@@ -67,69 +67,16 @@ public class StudentController {
         return studentService.getAverageStudentsAge();
     }
     @GetMapping("/print-parallel")
-    public void printParallel() throws InterruptedException {
-        List<Student> students=studentService.getAllStudents();
-        if(students.size()<6){
-            throw new LessThanSixException("Студентов мало чем шесть!!!");
-        }
-        for (int i = 0; i <2 ; i++) {
-            System.out.println(Thread.currentThread().getName()+" "+students.get(i).getName());
-        }
-        Thread thread1 = new Thread(()->{
-            for (int i = 2; i <4 ; i++) {
-                System.out.println(Thread.currentThread().getName()+" "+students.get(i).getName());
-            }
-        });
-        Thread thread2 = new Thread(()->{
-            for (int i = 4; i <6 ; i++) {
-                System.out.println(Thread.currentThread().getName()+" "+students.get(i).getName());
-            }
-        });
-        thread1.start();
-        thread2.start();
-        thread1.join();
-        thread2.join();
-
+    public void printParallel() {
+        studentService.printParallel();
     }
-    private synchronized void printSynchronizedStudentsNames(Student student){
-        try {
 
-            Thread.sleep(50);
-
-            System.out.println(
-                    Thread.currentThread().getName() + " " + student.getName()
-            );
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new StudentPrintException("Ошибка при выводе студента", e);
-        }
-    }
 
     @GetMapping("/print-synchronized")
-    public void printSynchronized() throws InterruptedException {
-        List<Student> students=studentService.getAllStudents();
-        if(students.size()<6){
-            throw new LessThanSixException("Студентов мало чем шесть!!!");
-        }
-        for (int i = 0; i <2 ; i++) {
-            printSynchronizedStudentsNames(students.get(i));
-        }
-        Thread thread1 = new Thread(()->{
-            for (int i = 2; i <4 ; i++) {
-                printSynchronizedStudentsNames(students.get(i));
-
-            }
-        });
-        Thread thread2 = new Thread(()->{
-            for (int i = 4; i <6 ; i++) {
-                printSynchronizedStudentsNames(students.get(i));
-            }
-        });
-        thread1.start();
-        thread2.start();
-        thread1.join();
-        thread2.join();
+    public void printSynchronized() {
+        studentService.printSynchronized();
     }
+
 
 
 }

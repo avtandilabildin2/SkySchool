@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.entity.Faculty;
 import ru.hogwarts.school.entity.Student;
+import ru.hogwarts.school.exceptions.LessThanSixException;
+import ru.hogwarts.school.exceptions.StudentPrintException;
 import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
 
@@ -133,9 +135,64 @@ public class StudentServiceImpl implements StudentService {
                 .orElse(0.0);
     }
 
+    private synchronized void printSynchronizedStudentsNames(Student student){
+        try {
+
+            Thread.sleep(50);
+
+            System.out.println(
+                    Thread.currentThread().getName() + " " + student.getName()
+            );
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new StudentPrintException("Ошибка при выводе студента", e);
+        }
+    }
     @Override
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public void printSynchronized()  {
+        List<Student> students=studentRepository.findAll();
+        if(students.size()<6){
+            throw new LessThanSixException("Студентов мало чем шесть!!!");
+        }
+        for (int i = 0; i <2 ; i++) {
+            printSynchronizedStudentsNames(students.get(i));
+        }
+        Thread thread1 = new Thread(()->{
+            for (int i = 2; i <4 ; i++) {
+                printSynchronizedStudentsNames(students.get(i));
+
+            }
+        });
+        Thread thread2 = new Thread(()->{
+            for (int i = 4; i <6 ; i++) {
+                printSynchronizedStudentsNames(students.get(i));
+            }
+        });
+        thread1.start();
+        thread2.start();
+    }
+    @Override
+    public void printParallel() {
+        List<Student> students=studentRepository.findAll();
+        if(students.size()<6){
+            throw new LessThanSixException("Студентов мало чем шесть!!!");
+        }
+        for (int i = 0; i <2 ; i++) {
+            System.out.println(Thread.currentThread().getName()+" "+students.get(i).getName());
+        }
+        Thread thread1 = new Thread(()->{
+            for (int i = 2; i <4 ; i++) {
+                System.out.println(Thread.currentThread().getName()+" "+students.get(i).getName());
+            }
+        });
+        Thread thread2 = new Thread(()->{
+            for (int i = 4; i <6 ; i++) {
+                System.out.println(Thread.currentThread().getName()+" "+students.get(i).getName());
+            }
+        });
+        thread1.start();
+        thread2.start();
+
     }
 
 

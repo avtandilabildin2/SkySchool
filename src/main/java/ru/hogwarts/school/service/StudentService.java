@@ -25,6 +25,7 @@ public interface StudentService {
   List<Student> getLastFiveStudents();
   List<String> getStudentsNamesStartingWithA();
   double getAverageStudentsAge();
-  List<Student> getAllStudents();
+  void printSynchronized();
+  void printParallel();
 
 }
